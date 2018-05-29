@@ -75,11 +75,46 @@ var customEvent={
 		return this;
 	}
 };
+
+//获取url后面的参数
+function getQueryString(name) {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
+    let result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
+    if (result != null) {
+        return decodeURIComponent(result[2]);
+    } else {
+        return null;
+    }
+};
+
+// 冒泡排序
+function bubbleSort(arr3) {
+　　var low = 0;
+　　var high= arr.length-1; //设置变量的初始值
+　　var tmp,j;
+　　while (low < high) {
+　　　　for (j= low; j< high; ++j) {         //正向冒泡,找到最大者
+　　　　　　if (arr[j]> arr[j+1]) {
+　　　　　　　　tmp = arr[j]; arr[j]=arr[j+1];arr[j+1]=tmp;
+　　　　　　}
+　　　　}
+　　　　--high;  //修改high值, 前移一位
+　　　　for (j=high; j>low; --j) {          //反向冒泡,找到最小者
+　　　　　　if (arr[j]<arr[j-1]) {
+　　　　　　　　tmp = arr[j]; arr[j]=arr[j-1];arr[j-1]=tmp;
+　　　　　　}
+　　　　}　
+　　　　++low;  //修改low值,后移一位
+　　}
+　　return arr3;
+};
 export {
     isEmpty,
     lTrim,
     trim,
     rTrim,
     isNumber,
-    customEvent
+    customEvent,
+    getQueryString,
+    bubbleSort,
 }
