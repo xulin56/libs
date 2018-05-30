@@ -1,0 +1,22 @@
+{
+  "name": "xulinjs",
+  "version": "1.0.1",
+  "description": "项目常用",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xulin56/libs.git"
+  },
+  "keywords": [
+    "方便项目"
+  ],
+  "author": "hexulin <1132777020@qq.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xulin56/libs/issues"
+  },
+  "homepage": "https://github.com/xulin56/libs#readme"
+}

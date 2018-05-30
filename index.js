@@ -148,6 +148,117 @@ function rnd(n, m){
     return random;
 };
 
+
+//ajax
+//ajax({//示例
+//  url:'',
+//  type:'post',
+//  data:'',
+//  closeToForm:false,
+//  dataType:'json',
+//  headers:{},
+//  xhr:function(xhr){
+//      console.log(xhr);
+//  },
+//  progress:function(ev){
+//      console.log(ev);
+//  },
+//  success:function(data){
+//      console.log(data);
+//  },
+//  error:function(data){
+//      console.log(data);
+//  },
+//});
+function ajax(json){
+    var str='';
+
+    json.type=json.type.toLowerCase()||'get';
+    json.dataType=json.dataType.toLowerCase()||'json';
+
+    if(!json.closeToForm&&json.data&&Type(json.data)=='object'){
+        for(var attr in json.data){
+            str+=attr+'='+json.data[attr]+'&';
+        }
+        json.data=str.substring(0,str.length-1);
+    }
+
+    var xhr=null;
+
+    try{
+        xhr=new XMLHttpRequest();
+    }catch(e){
+        xhr=new window.ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    if(json.xhr&&Type(json.xhr)=='function'){
+        xhr=json.xhr(xhr);
+    }
+
+    if(xhr.upload&&json.progress&&Type(json.progress)=='function'){
+        bind(xhr.upload,'progress',json.progress);
+    }
+
+    if(json.type=='get'&&json.data){
+        json.url+='?'+json.data;
+    }
+
+    xhr.open(json.type,json.url,true);
+
+    if(json.type=='get'){
+        xhr.send();
+    }else{
+        if(!json.closeToForm)xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+        if(json.headers&&Type(json.headers)=='object'){
+            for(var attr in json.headers){
+                xhr.setRequestHeader(attr,json.headers[attr]);
+            }
+        }
+        xhr.send(json.data);
+    }
+
+    json.before&&Type(json.before)=='function'&&json.before(xhr);
+    xhr.onreadystatechange=function(){
+        var data=null;
+
+        if(xhr.readyState==4){
+            if(xhr.status==200){
+                try{
+                    switch(json.dataType){
+                        case 'text':
+                                data=xhr.responseText;
+                            break;
+                        case 'json':
+                                data=JSON.parse(xhr.responseText);
+                            break;
+                        case 'html':
+                                var oDiv=document.createElement('div');
+
+                                oDiv.setAttribute('dataType','html');
+                                oDiv.innerHTML=xhr.responseText;
+                                data=oDiv;
+                            break;
+                        case 'script':
+                                var oScript=document.createElement('script');
+
+                                oScript.setAttribute('dataType','script');
+                                oScript.innerHTML=xhr.responseText;
+                                document.body.appendChild(oScript);
+                                data=oScript;
+                            break;
+                    }
+
+                }catch(e){
+                    console.log(e);
+                }
+                json.after&&Type(json.after)=='function'&&json.after(xhr,data);
+                json.success&&Type(json.success)=='function'&&json.success(data);
+            }else{
+                json.error&&Type(json.error)=='function'&&json.error(xhr.status);
+            }
+        }
+    };
+};
 export {
     isEmpty,
     lTrim,
@@ -161,5 +272,6 @@ export {
     getArrMax,
     getArrMaxVal,
     unique,
-    rnd
+    rnd,
+    ajax
 }
