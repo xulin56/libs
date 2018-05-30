@@ -108,6 +108,46 @@ function bubbleSort(arr3) {
 　　}
 　　return arr3;
 };
+
+function descendingSort(arr) {
+    arr.sort(function (x,y) {
+        return y-x;
+    });
+    return arr;
+};
+
+//获取数组中最大值，es5写法
+function getArrMax(arr) {
+    return Math.max.apply(Math, arr)
+};
+
+//获取数组中最大值，es6写法
+function getArrMaxVal(arr) {
+    return Math.max(...arr);
+};
+
+// 去除数组中的重复项
+function unique(arr) {
+        var newArr = [];
+        var l = arr.length;
+        for (var i = 0; i < l; i++){
+            for (var j = i + 1; j < l; j++)
+            {
+                if (arr[i] === arr[j]) j = ++i;
+            }
+            newArr.push(arr[i]);
+        }
+        return newArr;
+};
+
+// 获取一个区间的随机整数
+// @param n : 区间的最小值
+// @param m : 区间的最大值
+function rnd(n, m){
+    var random = Math.floor(Math.random()*(m-n+1)+n);
+    return random;
+};
+
 export {
     isEmpty,
     lTrim,
@@ -117,4 +157,9 @@ export {
     customEvent,
     getQueryString,
     bubbleSort,
+    descendingSort,
+    getArrMax,
+    getArrMaxVal,
+    unique,
+    rnd
 }
