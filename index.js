@@ -474,38 +474,59 @@ function unbind(obj,evname,fn){
     }
 };
 
-export {
-    idDom,
-    classDom,
-    tagDom,
-    QSDom,
-    QSADom,
-    createDom,
-    createtxt,
-    addDom,
-    addBody,
-    isEmpty,
-    lTrim,
-    trim,
-    rTrim,
-    isNumber,
-    customEvent,
-    getQueryString,
-    bubbleSort,
-    descendingSort,
-    getArrMax,
-    getArrMaxVal,
-    unique,
-    rnd,
-    ajax,
-    cookie,
-    isOnline,
-    lStore,
-    sStore,
-    goPage,
-    htmlFontSize,
-    isPhone,
-    isWeixin,
-    bind,
-    unbind
-}
+//获取字符串中的数组
+function findNum(str) {
+    let arr = [];
+    let tmp = '';
+    for(var i=0;i<str.length;i++){
+        if(str.charAt(i)<='9' && str.charAt(i)>0){
+            tmp += str.charAt(i);
+        }else {
+            if(tmp) {
+                arr.push(tmp);
+                tmp = '';
+            }
+        }
+        
+    }
+    if(tmp) {
+        arr.push(tmp);
+        tmp = '';
+    }
+    return arr;
+};
+// export {
+//     idDom,
+//     classDom,
+//     tagDom,
+//     QSDom,
+//     QSADom,
+//     createDom,
+//     createtxt,
+//     addDom,
+//     addBody,
+//     isEmpty,
+//     lTrim,
+//     trim,
+//     rTrim,
+//     isNumber,
+//     customEvent,
+//     getQueryString,
+//     bubbleSort,
+//     descendingSort,
+//     getArrMax,
+//     getArrMaxVal,
+//     unique,
+//     rnd,
+//     ajax,
+//     cookie,
+//     isOnline,
+//     lStore,
+//     sStore,
+//     goPage,
+//     htmlFontSize,
+//     isPhone,
+//     isWeixin,
+//     bind,
+//     unbind
+// }
