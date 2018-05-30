@@ -1,3 +1,47 @@
+function idDom(id) {
+    return document.getElementById(id);
+};
+
+//获取class类名的参数dom
+function classDom(Class){
+    return document.getElementsByClassName(Class)[0];
+};
+
+//获取document里的所有div，返回的是个数组
+function tagDom(dom){
+    return document.getElementsByTagName(dom);
+};
+
+//获取document里的第一个参数dom
+function QSDom(dom){
+    return document.querySelector(dom);
+};
+
+//获取document里所有的参数dom，返回是个数组
+function QSADom(dom){
+    return document.querySelectorAll(dom);
+};
+
+//创建一个dom
+function createDom(dom){
+    return document.createElement(dom);
+};
+
+//创建一个文本
+function createtxt(txt){
+    return document.createTextNode(txt)
+}
+
+//将obj1添加到obj中
+function addDom(obj,obj1){
+    obj.appendChild(obj1);
+};
+
+//将参数obj节点添加到document的body里
+function addBody(obj){
+    document.body.appendChild(obj);
+};
+
 //判断一个object是否为{}
 function isEmpty(obj){
     for(let key in obj) {
@@ -259,7 +303,187 @@ function ajax(json){
         }
     };
 };
+var cookie = {
+    getCookie: function (cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+        }
+        return "";
+    },
+    setCookie: function (cname, cvalue) {
+        document.cookie = cname + "=" + cvalue;
+    },
+    clearCookie: function (cname) {
+        var myDate = new Date();
+        myDate.setTime(-1000);//设置过期时间
+        document.cookie = cname + "=''; expires=" + myDate.toGMTString();
+    }
+};
+
+//判断网络连接与断开
+function isOnline(onlineCb,offlineCb) {
+    let el = document.body;    
+    if (el.addEventListener) {    
+       window.addEventListener("online", function () { 
+         onlineCb();
+     }, true);    
+       window.addEventListener("offline", function () {    
+         offlineCb();
+     }, true);    
+    }    
+    else if (el.attachEvent) {    
+       window.attachEvent("ononline", function () {    
+         onlineCb();
+     });    
+       window.attachEvent("onoffline", function () {    
+         offlineCb();
+     });    
+    }    
+    else {    
+       window.ononline = function () {    
+         onlineCb();
+     };    
+       window.onoffline = function () {    
+         offlineCb();
+     };    
+    }
+};
+
+
+//localStorage和localSession封装
+var Store=function(){
+    this.name='Store';
+};
+Store.prototype={
+    init:function(options){
+        this.store=function(){
+            return options.type;
+        };
+        return this;
+    },
+    set:function(key,value){
+        var type=Type(value);
+
+        switch(type){
+            case 'object':
+                            this.store().setItem(key,JSON.stringify(value));
+                        break;
+            case 'array':
+                            this.store().setItem(key,'['+value+']');
+                        break;
+            case 'function'://如果是函数先用eval()计算执行js代码
+                            this.store().setItem(key,value);
+                        break;
+            default :
+                            this.store().setItem(key,value);
+        }
+
+    },
+    get:function(key){
+        var value=this.store().getItem(key);
+
+        try{
+            value=JSON.parse(value);
+        }catch(e){}
+        return value;
+    },
+    getAll:function(){
+        var json={};
+        var value='';
+
+        for(var attr in this.store()){
+            try{
+                value=JSON.parse(this.store()[attr]);
+            }catch(e){}
+            json[attr]=value;
+        }
+        return  json;
+    },
+    remove:function(key){
+        this.store().removeItem(key);
+    },
+    clear:function(){
+        this.store().clear();
+    },
+};
+var lStore=new Store().init({
+    'type':window.localStorage,
+});
+
+var sStore=new Store().init({
+    'type':window.sessionStorage,
+});
+
+
+//判断设备跳转不同地址
+function goPage(moHref,pcHref){
+    var reg=/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i;
+
+    window.location.href=navigator.userAgent.match(reg)?moHref:pcHref;
+};
+
+//根据设备宽度来写相对布局,
+//最小1rem=100px(宽度为375px屏幕下),3.75rem=100%;
+//根据375屏幕下换算来布局
+//小于375屏幕根节点字体大小与375屏幕保持一致，注意宽度的溢出
+function htmlFontSize(){
+    function change(){
+        var fontSize=document.documentElement.clientWidth/3.75;
+
+        if(fontSize<100)fontSize=100;
+        if(fontSize>208)fontSize=208;
+        document.getElementsByTagName('html')[0].style.fontSize=fontSize+'px';
+    };
+    change();
+    window.onresize=change;
+};
+
+//判断是否是手机浏览器
+function isPhone(){
+    var reg=/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i;
+    return window.navigator.userAgent.match(reg)?true:false;
+};
+
+//判断是否是微信浏览器
+function isWeixin(){
+    var reg=/(micromessenger)/i;
+    return window.navigator.userAgent.match(reg)?true:false;
+};
+
+//绑定事件，可重复绑定('事件名称'必须加引号)
+function bind(obj,evname,fn){
+    if(obj.addEventListener){
+        obj.addEventListener(evname,fn,false);
+    }else{
+        obj.attachEvent('on'+evname,function(){
+            fn.call(obj);
+        });
+    }
+};
+
+//取消绑定，可重复取消('事件名称'必须加引号)
+function unbind(obj,evname,fn){
+    if(obj.removeEventListener){
+        obj.removeEventListener(evname,fn,false);
+    }else{
+        obj.detachEvent('on'+evname,fn);
+    }
+};
+
 export {
+    idDom,
+    classDom,
+    tagDom,
+    QSDom,
+    QSADom,
+    createDom,
+    createtxt,
+    addDom,
+    addBody,
     isEmpty,
     lTrim,
     trim,
@@ -273,5 +497,15 @@ export {
     getArrMaxVal,
     unique,
     rnd,
-    ajax
+    ajax,
+    cookie,
+    isOnline,
+    lStore,
+    sStore,
+    goPage,
+    htmlFontSize,
+    isPhone,
+    isWeixin,
+    bind,
+    unbind
 }
