@@ -72,6 +72,26 @@ function isNumber(obj) {
     return typeof obj === 'number' && !isNaN(obj)
 };
 
+//判断数据类型的方法（对typeof的增强，7种常用类型的判断，返回小写字符串）
+function dataType(obj){
+    if(obj===null){
+        return 'null';
+    }
+    if(obj!==obj){
+        return 'nan';
+    }
+    if(typeof Array.isArray==='function'){
+        if(Array.isArray(obj)){	//浏览器支持则使用isArray()方法
+            return 'array';
+        }
+    }else{  					//否则使用toString方法
+        if(Object.prototype.toString.call(obj)==='[object Array]'){
+            return 'array';
+        }
+    }
+    return (typeof obj).toLowerCase();
+};
+
 //生成32位唯一字符串(大小写字母数字组合)
 function soleString32(){
     var str='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -95,10 +115,10 @@ function soleString32(){
 var customEvent={
 	json:{},
 	on:function(evName,fn){
-		if(Type(this.json[evName])!='object'){
+		if(dataType(this.json[evName])!='object'){
 			this.json[evName]={};
 		}
-		if(Type(fn)=='function'){
+		if(dataType(fn)=='function'){
 			fn.id=soleString32();
 			this.json[evName][fn.id]=fn;
 		}
@@ -107,9 +127,9 @@ var customEvent={
 	emit:function(evName,data){
 		var evFnArr=this.json[evName];
 
-		if(Type(evFnArr)=='object'){
+		if(dataType(evFnArr)=='object'){
 			for(var attr in this.json[evName]){
-				if(Type(this.json[evName][attr])=='function'){
+				if(dataType(this.json[evName][attr])=='function'){
 					this.json[evName][attr](data);
 				}
 			}
@@ -119,8 +139,8 @@ var customEvent={
 	remove:function(evName,fn){
 		var evFnArr=this.json[evName];
 
-		if(Type(evName)=='string'&&Type(evFnArr)=='object'){
-			if(Type(fn)=='function'){
+		if(dataType(evName)=='string'&&dataType(evFnArr)=='object'){
+			if(dataType(fn)=='function'){
 				if(fn.id){
 					delete this.json[evName][fn.id];
 				}else{
@@ -238,7 +258,7 @@ function ajax(json){
     var attr = null;
     json.type=json.type.toLowerCase()||'get';
     json.dataType=json.dataType.toLowerCase()||'json';
-    if(!json.closeToForm&&json.data&&Type(json.data)=='object'){
+    if(!json.closeToForm&&json.data&&dataType(json.data)=='object'){
         for(var key0 in json.data){
             str+=key0+'='+json.data[key0]+'&';
         }
@@ -253,11 +273,11 @@ function ajax(json){
         xhr=new window.ActiveXObject('Microsoft.XMLHTTP');
     }
 
-    if(json.xhr&&Type(json.xhr)=='function'){
+    if(json.xhr&&dataType(json.xhr)=='function'){
         xhr=json.xhr(xhr);
     }
 
-    if(xhr.upload&&json.progress&&Type(json.progress)=='function'){
+    if(xhr.upload&&json.progress&&dataType(json.progress)=='function'){
         bind(xhr.upload,'progress',json.progress);
     }
 
@@ -270,7 +290,7 @@ function ajax(json){
         xhr.send();
     }else{
         if(!json.closeToForm)xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
-        if(json.headers&&Type(json.headers)=='object'){
+        if(json.headers&&dataType(json.headers)=='object'){
             for(attr in json.headers){
                 xhr.setRequestHeader(attr,json.headers[attr]);
             }
@@ -278,7 +298,7 @@ function ajax(json){
         xhr.send(json.data);
     }
 
-    json.before&&Type(json.before)=='function'&&json.before(xhr);
+    json.before&&dataType(json.before)=='function'&&json.before(xhr);
     xhr.onreadystatechange=function(){
         var data=null;
 
@@ -312,10 +332,10 @@ function ajax(json){
                 }catch(e){
                     console.log(e);
                 }
-                json.after&&Type(json.after)=='function'&&json.after(xhr,data);
-                json.success&&Type(json.success)=='function'&&json.success(data);
+                json.after&&dataType(json.after)=='function'&&json.after(xhr,data);
+                json.success&&dataType(json.success)=='function'&&json.success(data);
             }else{
-                json.error&&Type(json.error)=='function'&&json.error(xhr.status);
+                json.error&&dataType(json.error)=='function'&&json.error(xhr.status);
             }
         }
     };
@@ -383,7 +403,7 @@ Store.prototype={
         return this;
     },
     set:function(key,value){
-        var type=Type(value);
+        var type=dataType(value);
 
         switch(type){
             case 'object':
@@ -513,26 +533,6 @@ function findNum(str) {
     return arr;
 };
 
-//判断数据类型的方法（对typeof的增强，7种常用类型的判断，返回小写字符串）
-function dataType(obj){
-    if(obj===null){
-        return 'null';
-    }
-    if(obj!==obj){
-        return 'nan';
-    }
-    if(typeof Array.isArray==='function'){
-        if(Array.isArray(obj)){	//浏览器支持则使用isArray()方法
-            return 'array';
-        }
-    }else{  					//否则使用toString方法
-        if(Object.prototype.toString.call(obj)==='[object Array]'){
-            return 'array';
-        }
-    }
-    return (typeof obj).toLowerCase();
-};
-
 //获取到document的位置
 function getPos(obj,attr){
     var value=0;
@@ -550,7 +550,7 @@ function normalDate(oDate){
     var CurrentDate=oDate;
     var reg=/\-+/g;
 
-    if(Type(oDate)=='string'){
+    if(dataType(oDate)=='string'){
         oDate=oDate.split('.')[0];//解决ie浏览器对yyyy-MM-dd HH:mm:ss.S格式的不兼容
         oDate=oDate.replace(reg,'/');//解决苹果浏览器对yyyy-MM-dd格式的不兼容性
     }
@@ -658,7 +658,7 @@ function getDecimal(val){
         zero+='0';
     }
 
-    if(Type(value)=='number'){
+    if(dataType(value)=='number'){
         value+='';
         value=value.split('.');
         value[0]=value[0].split('');
@@ -699,7 +699,7 @@ function getDecimal(val){
 //     success:function(data){
 //         //只要成功都会走
 //         //成功code已经失败code处理
-//         if(Type(data)==="object"){
+//         if(dataType(data)==="object"){
 //             if(data.code==='0000'){
 //                 json.success&&json.success(data);
 //                 return;
@@ -719,7 +719,7 @@ function getDecimal(val){
  function myAjax(obj){
     /*1.判断有没有传递参数，同时参数是否是一个对象*/
     var key = null;
-     if(obj.data&&Type(obj.data)=='object'){
+     if(obj.data&&dataType(obj.data)=='object'){
          var str = '';
          for(var attr in obj.data){
              str+=attr+'='+obj.data[attr]+'&';
@@ -751,7 +751,7 @@ function getDecimal(val){
     /*6.2:设置请求头:判断请求方式，如果是post则进行设置*/
     if(type=="post"){
         xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        if(obj.headers&&Type(obj.headers)=='object'){
+        if(obj.headers&&dataType(obj.headers)=='object'){
             for(key in obj.headers){
                 xhr.setRequestHeader(key,obj.headers[key]);
             }
@@ -764,7 +764,7 @@ function getDecimal(val){
     xhr.onreadystatechange=function(){
         /*8.判断响应是否成功*/
         if(xhr.readyState==0){
-            obj.before&&Type(obj.before)=='function'&&obj.before(xhr);
+            obj.before&&dataType(obj.before)=='function'&&obj.before(xhr);
         }
         if(xhr.readyState===4 && xhr.status===200){
             /*客户端可用的响应结果*/
@@ -783,12 +783,12 @@ function getDecimal(val){
                 result=xhr.responseText;
             }
             /*11.拿到数据，调用客户端传递过来的回调函数*/
-            obj.after&&Type(obj.after)=='function'&&obj.after(xhr,data);
+            obj.after&&dataType(obj.after)=='function'&&obj.after(xhr,data);
             success(result);
         }
         if(xhr.readyState===4 && xhr.status!==200) {
             console.log(xhr.status)
-            obj.error&&Type(obj.error)=='function'&&obj.error(xhr.status);
+            obj.error&&dataType(obj.error)=='function'&&obj.error(xhr.status);
         }
     }
 
