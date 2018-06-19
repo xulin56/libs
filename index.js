@@ -140,7 +140,7 @@ var customEvent={
 };
 
 //获取url后面的参数
-function getQueryString(name) {
+function getParmeter(name) {
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
     let result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
     if (result != null) {
@@ -679,6 +679,80 @@ function getDecimal(val){
     return arr;
 };
 
+/*实现ajax请求*/
+ function myAjax(obj){
+    /*1.判断有没有传递参数，同时参数是否是一个对象*/
+    var key = null;
+    if(obj==null || typeof obj!="object"){
+        return false;
+    }
+    /*2.获取请求类型,如果没有传递请求方式，那么默认为get*/
+    var type=obj.type || 'post';
+    /*3.获取请求的url  location.pathname:就是指当前请求发起的路径*/
+    var url=obj.url || window.location.pathname;
+    /*4.获取请求传递的参数*/
+    var data=obj.data || {};
+    /*4.1获取拼接之后的参数*/
+    data=getParmeter(data);
+    /*5.获取请求传递的回调函数*/
+    var success=obj.success || function(){};
+
+    /*6:开始发起异步请求*/
+    /*6.1:创建异步对象*/
+    var xhr=new XMLHttpRequest();
+    /*6.2:设置请求行,判断请求类型，以此决定是否需要拼接参数到url*/
+    if(type=='get'){
+        url=url+"?"+data;
+        /*重置参数，为post请求简化处理*/
+        data=null;
+    }
+    xhr.open(type,url);
+    /*6.2:设置请求头:判断请求方式，如果是post则进行设置*/
+    if(type=="post"){
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        if(obj.headers&&Type(obj.headers)=='object'){
+            for(key in obj.headers){
+                xhr.setRequestHeader(key,obj.headers[key]);
+            }
+        }
+    }
+    /*6.3:设置请求体,post请求则需要传递参数*/
+    xhr.send(data);
+
+    /*7.处理响应*/
+    xhr.onreadystatechange=function(){
+        /*8.判断响应是否成功*/
+        if(xhr.readyState==0){
+            obj.before&&Type(obj.before)=='function'&&obj.before(xhr);
+        }
+        if(xhr.readyState===4 && xhr.status===200){
+            /*客户端可用的响应结果*/
+            var result=null;
+            /*9.获取响应头Content-Type ---类型是字符串*/
+            var grc=xhr.getResponseHeader("Content-Type");
+            /*10.根据Content-Type类型来判断如何进行解析*/
+            if(grc.indexOf("json") != -1){
+                /*转换为js对象*/
+                result=JSON.parse(xhr.responseText);
+            }
+            else if(grc.indexOf("xml") != -1){
+                result=xhr.responseXML;
+            }
+            else{
+                result=xhr.responseText;
+            }
+            /*11.拿到数据，调用客户端传递过来的回调函数*/
+            obj.after&&Type(obj.after)=='function'&&obj.after(xhr,data);
+            success(result);
+        }
+        if(xhr.readyState===4 && xhr.status!==200) {
+            console.log(xhr.status)
+            obj.error&&Type(obj.error)=='function'&&obj.error(xhr.status);
+        }
+    }
+
+}
+
 export {
     idDom,
     classDom,
@@ -695,7 +769,7 @@ export {
     rTrim,
     isNumber,
     customEvent,
-    getQueryString,
+    getParmeter,
     bubbleSort,
     descendingSort,
     getArrMax,
@@ -721,5 +795,6 @@ export {
     dateFormat0,
     dateFormat1,
     changeTwoDecimal_f,
-    getDecimal
+    getDecimal,
+    myAjax
 }
