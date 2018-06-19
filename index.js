@@ -680,11 +680,14 @@ function getDecimal(val){
 };
 
 // myAjax({
-//         url:baseUrl+url,
-//             type:method,
-//             data:json,
-//             dataType:'json',
-//             headers : {sign,token},
+//     url:baseUrl+url,
+//         type:method,
+//         data:json,
+//         dataType:'json',
+//         headers : {sign,token},
+//     success:function(res){
+//         endFn&&endFn(res);
+//     },
 //     before:function(xhr){
 //         //loading显示处理
 //         store.dispatch(action.getLoading(true));;
@@ -716,7 +719,14 @@ function getDecimal(val){
  function myAjax(obj){
     /*1.判断有没有传递参数，同时参数是否是一个对象*/
     var key = null;
-    if(obj==null || typeof obj!="object"){
+     if(obj.data&&Type(obj.data)=='object'){
+         var str = '';
+         for(var attr in obj.data){
+             str+=attr+'='+obj.data[attr]+'&';
+         }
+         obj.data=str.substring(0,str.length-1);
+     }
+     if(obj==null || typeof obj!="object"){
         return false;
     }
     /*2.获取请求类型,如果没有传递请求方式，那么默认为get*/
@@ -725,8 +735,6 @@ function getDecimal(val){
     var url=obj.url || window.location.pathname;
     /*4.获取请求传递的参数*/
     var data=obj.data || {};
-    /*4.1获取拼接之后的参数*/
-    data=getParmeter(data);
     /*5.获取请求传递的回调函数*/
     var success=obj.success || function(){};
 
@@ -775,7 +783,7 @@ function getDecimal(val){
                 result=xhr.responseText;
             }
             /*11.拿到数据，调用客户端传递过来的回调函数*/
-            obj.after&&Type(obj.after)=='function'&&obj.after(xhr,result);
+            obj.after&&Type(obj.after)=='function'&&obj.after(xhr,data);
             success(result);
         }
         if(xhr.readyState===4 && xhr.status!==200) {
