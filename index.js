@@ -514,7 +514,7 @@ function findNum(str) {
 };
 
 //判断数据类型的方法（对typeof的增强，7种常用类型的判断，返回小写字符串）
-function Type(obj){
+function dataType(obj){
     if(obj===null){
         return 'null';
     }
@@ -828,7 +828,7 @@ export {
     isWeixin,
     bind,
     unbind,
-    Type,
+    dataType,
     soleString32,
     findNum,
     getPos,
