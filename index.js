@@ -626,6 +626,58 @@ function dateFormat1(myDate){
     return lookTime;
 };
 
+//格式化数字 12=>12.00
+function changeTwoDecimal_f(num)
+{
+    var f_x = parseFloat(num);
+    if (isNaN(f_x)) return;
+    var f_x1 = Math.floor(num*100)/100;
+    var s_x = f_x1.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0)
+    {
+        pos_decimal = s_x.length;
+        s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2)
+    {
+        s_x += '0';
+    }
+    return s_x;
+};
+
+//金额格式化 12232323=>12,232,323.00
+function getDecimal(val){
+    var oldValue=val;
+    var value=+val;
+    var arr=[];
+    var len=2;
+    var zero='';
+
+    for(var i=0;i<len;i++){
+        zero+='0';
+    }
+
+    if(Type(value)=='number'){
+        value+='';
+        value=value.split('.');
+        value[0]=value[0].split('');
+        value[1]=(value[1]||'')+zero;
+        value[1]=value[1].substring(0,len);
+
+        arr.unshift('.',value[1]);
+        while(value[0].length>3){
+            arr.unshift(',',value[0].splice(value[0].length-3,3).join(''));
+        }
+
+        arr=value[0].join('')+arr.join('');
+    }else{
+        arr=oldValue;
+    }
+
+    if(arr&&arr.length)arr=arr.replace('-,','-');
+    return arr;
+};
 
 export {
     idDom,
@@ -668,4 +720,6 @@ export {
     normalDate,
     dateFormat0,
     dateFormat1,
+    changeTwoDecimal_f,
+    getDecimal
 }
