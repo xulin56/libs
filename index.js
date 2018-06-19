@@ -65,12 +65,31 @@ function trim(val){
 //去除字符串右侧空格
 function rTrim(val){
     return val.replace(/(\s*$)/g,"");
-}
+};
 
 //判断是否为number类型
 function isNumber(obj) {
     return typeof obj === 'number' && !isNaN(obj)
-}
+};
+
+//生成32位唯一字符串(大小写字母数字组合)
+function soleString32(){
+    var str='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var timestamp=+new Date()+Math.floor(Math.random()*10);
+    var resultStr='';
+
+    for(var i=0;i<19;i++){
+        resultStr+=str.charAt(Math.floor(Math.random()*str.length));
+    }
+    resultStr+=timestamp;
+
+    resultStr=resultStr.split('');
+    resultStr.sort(function(a,b){
+        return Math.random()-0.5;
+    });
+    resultStr=resultStr.join('');
+    return resultStr;
+};
 
 //自定义事件的实现
 var customEvent={
@@ -132,7 +151,7 @@ function getQueryString(name) {
 };
 
 // 冒泡排序
-function bubbleSort(arr3) {
+function bubbleSort(arr) {
 　　var low = 0;
 　　var high= arr.length-1; //设置变量的初始值
 　　var tmp,j;
@@ -150,7 +169,7 @@ function bubbleSort(arr3) {
 　　　　}　
 　　　　++low;  //修改low值,后移一位
 　　}
-　　return arr3;
+　　return arr;
 };
 
 function descendingSort(arr) {
@@ -216,13 +235,12 @@ function rnd(n, m){
 //});
 function ajax(json){
     var str='';
-
+    var attr = null;
     json.type=json.type.toLowerCase()||'get';
     json.dataType=json.dataType.toLowerCase()||'json';
-
     if(!json.closeToForm&&json.data&&Type(json.data)=='object'){
-        for(var attr in json.data){
-            str+=attr+'='+json.data[attr]+'&';
+        for(var key0 in json.data){
+            str+=key0+'='+json.data[key0]+'&';
         }
         json.data=str.substring(0,str.length-1);
     }
@@ -248,13 +266,12 @@ function ajax(json){
     }
 
     xhr.open(json.type,json.url,true);
-
     if(json.type=='get'){
         xhr.send();
     }else{
         if(!json.closeToForm)xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
         if(json.headers&&Type(json.headers)=='object'){
-            for(var attr in json.headers){
+            for(attr in json.headers){
                 xhr.setRequestHeader(attr,json.headers[attr]);
             }
         }
@@ -326,30 +343,30 @@ var cookie = {
 
 //判断网络连接与断开
 function isOnline(onlineCb,offlineCb) {
-    let el = document.body;    
-    if (el.addEventListener) {    
-       window.addEventListener("online", function () { 
+    let el = document.body;
+    if (el.addEventListener) {
+       window.addEventListener("online", function () {
          onlineCb();
-     }, true);    
-       window.addEventListener("offline", function () {    
+     }, true);
+       window.addEventListener("offline", function () {
          offlineCb();
-     }, true);    
-    }    
-    else if (el.attachEvent) {    
-       window.attachEvent("ononline", function () {    
+     }, true);
+    }
+    else if (el.attachEvent) {
+       window.attachEvent("ononline", function () {
          onlineCb();
-     });    
-       window.attachEvent("onoffline", function () {    
+     });
+       window.attachEvent("onoffline", function () {
          offlineCb();
-     });    
-    }    
-    else {    
-       window.ononline = function () {    
+     });
+    }
+    else {
+       window.ononline = function () {
          onlineCb();
-     };    
-       window.onoffline = function () {    
+     };
+       window.onoffline = function () {
          offlineCb();
-     };    
+     };
     }
 };
 
@@ -487,7 +504,7 @@ function findNum(str) {
                 tmp = '';
             }
         }
-        
+
     }
     if(tmp) {
         arr.push(tmp);
@@ -495,38 +512,160 @@ function findNum(str) {
     }
     return arr;
 };
-// export {
-//     idDom,
-//     classDom,
-//     tagDom,
-//     QSDom,
-//     QSADom,
-//     createDom,
-//     createtxt,
-//     addDom,
-//     addBody,
-//     isEmpty,
-//     lTrim,
-//     trim,
-//     rTrim,
-//     isNumber,
-//     customEvent,
-//     getQueryString,
-//     bubbleSort,
-//     descendingSort,
-//     getArrMax,
-//     getArrMaxVal,
-//     unique,
-//     rnd,
-//     ajax,
-//     cookie,
-//     isOnline,
-//     lStore,
-//     sStore,
-//     goPage,
-//     htmlFontSize,
-//     isPhone,
-//     isWeixin,
-//     bind,
-//     unbind
-// }
+
+//判断数据类型的方法（对typeof的增强，7种常用类型的判断，返回小写字符串）
+function Type(obj){
+    if(obj===null){
+        return 'null';
+    }
+    if(obj!==obj){
+        return 'nan';
+    }
+    if(typeof Array.isArray==='function'){
+        if(Array.isArray(obj)){	//浏览器支持则使用isArray()方法
+            return 'array';
+        }
+    }else{  					//否则使用toString方法
+        if(Object.prototype.toString.call(obj)==='[object Array]'){
+            return 'array';
+        }
+    }
+    return (typeof obj).toLowerCase();
+};
+
+//获取到document的位置
+function getPos(obj,attr){
+    var value=0;
+    var iPos=0;
+    while(obj){
+        iPos=attr=='left'?obj.offsetLeft:iPos=obj.offsetTop;
+        value+=iPos;
+        obj=obj.offsetParent;
+    }
+    return value;
+};
+
+//正常化日期
+function normalDate(oDate){
+    var CurrentDate=oDate;
+    var reg=/\-+/g;
+
+    if(Type(oDate)=='string'){
+        oDate=oDate.split('.')[0];//解决ie浏览器对yyyy-MM-dd HH:mm:ss.S格式的不兼容
+        oDate=oDate.replace(reg,'/');//解决苹果浏览器对yyyy-MM-dd格式的不兼容性
+    }
+
+    CurrentDate=new Date(oDate);
+    return CurrentDate;
+};
+
+//日期格式化函数
+//oDate（时间戳或字符串日期都支持）
+//fmt（格式匹配）
+//月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+//年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+//例子：
+//dateFormat0(new Date(),'yyyy-MM-dd hh:mm:ss.S') ==> 2006-07-02 08:09:04.423
+//dateFormat0(new Date(),'yyyy-M-d h:m:s.S')      ==> 2006-7-2 8:9:4.18
+function dateFormat0(mydate,ft){
+    var fmt=ft||'yyyy/MM/dd hh:mm:ss';
+    var oDate=normalDate(mydate);
+    var date={
+        "M+":oDate.getMonth()+1,                 //月份
+        "d+":oDate.getDate(),                    //日
+        "h+":oDate.getHours(),                   //小时
+        "m+":oDate.getMinutes(),                 //分
+        "s+":oDate.getSeconds(),                 //秒
+        "q+":Math.floor((oDate.getMonth()+3)/3), //季度，+3为了好取整
+        "S":oDate.getMilliseconds()              //毫秒
+    };
+
+    if(/(y+)/.test(fmt)){//RegExp.$1(正则表达式的第一个匹配，一共有99个匹配)
+        fmt=fmt.replace(RegExp.$1,(oDate.getFullYear()+'').substr(4-RegExp.$1.length));
+    }
+
+    for(var attr in date){
+        if(new RegExp('('+attr+')').test(fmt)){
+            fmt=fmt.replace(RegExp.$1,RegExp.$1.length==1?date[attr]:('00'+date[attr]).substring((date[attr]+'').length));
+        }
+    }
+
+    return fmt;
+};
+
+
+//时间格式化(多长时间之前)
+//oDate（时间戳或字符串日期都支持）
+function dateFormat1(myDate){
+    var oDate=normalDate(myDate);
+
+    if(+oDate>=+new Date()){
+        return '刚刚';
+    }
+    var lookTime=+new Date()-(+oDate);
+    var	seconds=Math.floor(lookTime/(1000));
+    var minutes=Math.floor(lookTime/(1000*60));
+    var hours=Math.floor(lookTime/(1000*60*60));
+    var days=Math.floor(lookTime/(1000*60*60*24));
+    var months=Math.floor(lookTime/(1000*60*60*24*30));
+    var years=Math.floor(lookTime/(1000*60*60*24*30*12));
+
+    if(seconds<60){
+        lookTime=seconds+'秒前';
+    }else if(minutes<60){
+        lookTime=minutes+'分钟前';
+    }else if(hours<24){
+        lookTime=hours+'小时前';
+    }else if(days<30){
+        lookTime=days+'天前';
+    }else if(months<12){
+        lookTime=months+'个月前';
+    }else{
+        lookTime=years+'年前';
+    }
+    return lookTime;
+};
+
+
+export {
+    idDom,
+    classDom,
+    tagDom,
+    QSDom,
+    QSADom,
+    createDom,
+    createtxt,
+    addDom,
+    addBody,
+    isEmpty,
+    lTrim,
+    trim,
+    rTrim,
+    isNumber,
+    customEvent,
+    getQueryString,
+    bubbleSort,
+    descendingSort,
+    getArrMax,
+    getArrMaxVal,
+    unique,
+    rnd,
+    ajax,
+    cookie,
+    isOnline,
+    lStore,
+    sStore,
+    goPage,
+    htmlFontSize,
+    isPhone,
+    isWeixin,
+    bind,
+    unbind,
+    Type,
+    soleString32,
+    findNum,
+    getPos,
+    normalDate,
+    dateFormat0,
+    dateFormat1,
+}
