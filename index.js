@@ -679,6 +679,39 @@ function getDecimal(val){
     return arr;
 };
 
+// myAjax({
+//         url:baseUrl+url,
+//             type:method,
+//             data:json,
+//             dataType:'json',
+//             headers : {sign,token},
+//     before:function(xhr){
+//         //loading显示处理
+//         store.dispatch(action.getLoading(true));;
+//     },
+//     after:function(xhr){
+//         //loading隐藏处理
+//         store.dispatch(action.getLoading(false));;
+//     },
+//     success:function(data){
+//         //只要成功都会走
+//         //成功code已经失败code处理
+//         if(Type(data)==="object"){
+//             if(data.code==='0000'){
+//                 json.success&&json.success(data);
+//                 return;
+//             }else {
+//                 json.success&&json.success(data);
+//                 alert("网络异常");
+//                 return;
+//             }
+//         }
+//     },
+//     error:function(error){
+//         alert('网络异常');
+//         store.dispatch(action.getLoading(false));;
+//     },
+// });
 /*实现ajax请求*/
  function myAjax(obj){
     /*1.判断有没有传递参数，同时参数是否是一个对象*/
@@ -742,7 +775,7 @@ function getDecimal(val){
                 result=xhr.responseText;
             }
             /*11.拿到数据，调用客户端传递过来的回调函数*/
-            obj.after&&Type(obj.after)=='function'&&obj.after(xhr,data);
+            obj.after&&Type(obj.after)=='function'&&obj.after(xhr,result);
             success(result);
         }
         if(xhr.readyState===4 && xhr.status!==200) {
