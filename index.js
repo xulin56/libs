@@ -44,7 +44,7 @@ function addBody(obj){
 
 //判断一个object是否为{}
 function isEmpty(obj){
-    for(var key in obj) {
+    for(let key in obj) {
         if(obj.hasOwnProperty(key)){
             return false;
         }
@@ -161,8 +161,8 @@ var customEvent={
 
 //获取url后面的参数
 function getParmeter(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
-    var result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
+    let result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
     if (result != null) {
         return decodeURIComponent(result[2]);
     } else {
@@ -202,6 +202,11 @@ function descendingSort(arr) {
 //获取数组中最大值，es5写法
 function getArrMax(arr) {
     return Math.max.apply(Math, arr)
+};
+
+//获取数组中最大值，es6写法
+function getArrMaxVal(arr) {
+    return Math.max(...arr);
 };
 
 // 去除数组中的重复项
@@ -358,7 +363,7 @@ var cookie = {
 
 //判断网络连接与断开
 function isOnline(onlineCb,offlineCb) {
-    var el = document.body;
+    let el = document.body;
     if (el.addEventListener) {
        window.addEventListener("online", function () {
          onlineCb();
@@ -508,8 +513,8 @@ function unbind(obj,evname,fn){
 
 //获取字符串中的数组
 function findNum(str) {
-    var arr = [];
-    var tmp = '';
+    let arr = [];
+    let tmp = '';
     for(var i=0;i<str.length;i++){
         if(str.charAt(i)<='9' && str.charAt(i)>0){
             tmp += str.charAt(i);
@@ -787,6 +792,50 @@ function getDecimal(val){
         }
     }
 
+};
+
+//文本被卷走的高度
+function getScrollTop(){
+    var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+    if(document.body){
+        bodyScrollTop = document.body.scrollTop;
+    }
+    if(document.documentElement){
+        documentScrollTop = document.documentElement.scrollTop;
+    }
+    scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
+    return scrollTop;
+};
+
+//获取文档的总高度
+function getScrollHeight(){
+    var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+    if(document.body){
+        bodyScrollHeight = document.body.scrollHeight;
+    }
+    if(document.documentElement){
+        documentScrollHeight = document.documentElement.scrollHeight;
+    }
+    scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
+    return scrollHeight;
+};
+
+//获取文本可见高度
+function getWindowHeight(){
+    var windowHeight = 0;
+    if(document.compatMode == "CSS1Compat"){
+        windowHeight = document.documentElement.clientHeight;
+    }else{
+        windowHeight = document.body.clientHeight;
+    }
+    return windowHeight;
+};
+function getBottom(cb){
+    window.onscroll = function(){
+        if(getScrollTop() + getWindowHeight() == getScrollHeight()){
+            cb();
+        }
+    };
 }
 
 export {
@@ -832,5 +881,9 @@ export {
     dateFormat1,
     changeTwoDecimal_f,
     getDecimal,
-    myAjax
+    myAjax,
+    getScrollTop,
+    getScrollHeight,
+    getWindowHeight,
+    getBottom
 }
