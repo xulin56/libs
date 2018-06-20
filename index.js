@@ -44,7 +44,7 @@ function addBody(obj){
 
 //判断一个object是否为{}
 function isEmpty(obj){
-    for(let key in obj) {
+    for(var key in obj) {
         if(obj.hasOwnProperty(key)){
             return false;
         }
@@ -161,8 +161,8 @@ var customEvent={
 
 //获取url后面的参数
 function getParmeter(name) {
-    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
-    let result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", 'i'); // 匹配目标参数
+    var result = window.location.search.substr(1).match(reg); // 对querystring匹配目标参数
     if (result != null) {
         return decodeURIComponent(result[2]);
     } else {
@@ -202,11 +202,6 @@ function descendingSort(arr) {
 //获取数组中最大值，es5写法
 function getArrMax(arr) {
     return Math.max.apply(Math, arr)
-};
-
-//获取数组中最大值，es6写法
-function getArrMaxVal(arr) {
-    return Math.max(...arr);
 };
 
 // 去除数组中的重复项
@@ -363,7 +358,7 @@ var cookie = {
 
 //判断网络连接与断开
 function isOnline(onlineCb,offlineCb) {
-    let el = document.body;
+    var el = document.body;
     if (el.addEventListener) {
        window.addEventListener("online", function () {
          onlineCb();
@@ -513,8 +508,8 @@ function unbind(obj,evname,fn){
 
 //获取字符串中的数组
 function findNum(str) {
-    let arr = [];
-    let tmp = '';
+    var arr = [];
+    var tmp = '';
     for(var i=0;i<str.length;i++){
         if(str.charAt(i)<='9' && str.charAt(i)>0){
             tmp += str.charAt(i);
