@@ -679,43 +679,35 @@ function getDecimal(val){
     return arr;
 };
 
-// myAjax({
-//     url:baseUrl+url,
-//         type:method,
-//         data:json,
-//         dataType:'json',
-//         headers : {sign,token},
-//     success:function(res){
-//         endFn&&endFn(res);
-//     },
-//     before:function(xhr){
-//         //loading显示处理
-//         store.dispatch(action.getLoading(true));;
-//     },
-//     after:function(xhr){
-//         //loading隐藏处理
-//         store.dispatch(action.getLoading(false));;
-//     },
-//     success:function(data){
-//         //只要成功都会走
-//         //成功code已经失败code处理
-//         if(dataType(data)==="object"){
-//             if(data.code==='0000'){
-//                 json.success&&json.success(data);
-//                 return;
-//             }else {
-//                 json.success&&json.success(data);
-//                 alert("网络异常");
-//                 return;
-//             }
-//         }
-//     },
-//     error:function(error){
-//         alert('网络异常');
-//         store.dispatch(action.getLoading(false));;
-//     },
-// });
-/*实现ajax请求*/
+// 实现ajax请求
+/*myAjax({
+    url:json.url,
+    type:json.type,
+    data:json.data,
+    closeToForm:json.closeToForm,
+    dataType:json.dataType,
+    headers:json.headers,
+    before:function(xhr){
+        //loading显示处理
+        store.dispatch(action.getLoading(true));;
+    },
+    after:function(xhr){
+        //loading隐藏处理
+        store.dispatch(action.getLoading(false));;
+    },
+    success:function(data){
+        //只要成功都会走
+        //成功code已经失败code处理
+        if(dataType(data)==="object"){
+            json.success&&json.success(data);
+            return;
+        }
+    },
+    error:function(err){
+        error(err+'网络异常');
+        store.dispatch(action.getLoading(false));
+    },
+});*/
  function myAjax(obj){
     /*1.判断有没有传递参数，同时参数是否是一个对象*/
     var key = null;
@@ -830,13 +822,52 @@ function getWindowHeight(){
     }
     return windowHeight;
 };
+
+//滚动条到达底部
 function getBottom(cb){
     window.onscroll = function(){
         if(getScrollTop() + getWindowHeight() == getScrollHeight()){
             cb();
         }
     };
-}
+};
+
+function goTop(){
+    var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    if (currentScroll > 0) {
+        window.requestAnimationFrame(goTop);
+        window.scrollTo (0,currentScroll - (currentScroll/5));
+    }
+};
+
+//文字横向滚动
+/*<div id="scroll_div" className="fl">
+    <ul id="scroll_begin" className='list'>
+        <li>恭喜793765***获得 <span className="pad_right">50元巨人点卡奖励</span></li>
+        <li>恭喜793765***获得 <span className="pad_right">50元巨人点卡奖励</span></li>
+        <li>恭喜793765***获得 <span className="pad_right">50元巨人点卡奖励</span></li>
+        <li>恭喜793765***获得 <span className="pad_right">50元巨人点卡奖励</span></li>
+    </ul>
+    <div id="scroll_end"></div>
+</div>*/
+function ScrollImgLeft(scroll_begin,scroll_end,scroll_div){
+    var speed=50;
+    var MyMar = null;
+    scroll_end.innerHTML=scroll_begin.innerHTML;
+    function Marquee(){
+        if(scroll_end.offsetWidth-scroll_div.scrollLeft<=0)
+            scroll_div.scrollLeft-=scroll_begin.offsetWidth;
+        else
+            scroll_div.scrollLeft++;
+    }
+    MyMar=setInterval(Marquee,speed);
+    scroll_div.onmouseover = function(){
+        clearInterval(MyMar);
+    }
+    scroll_div.onmouseout = function(){
+        MyMar = setInterval(Marquee,speed);
+    }
+};
 
 export {
     idDom,
@@ -885,5 +916,7 @@ export {
     getScrollTop,
     getScrollHeight,
     getWindowHeight,
-    getBottom
+    getBottom,
+    goTop,
+    ScrollImgLeft
 }
