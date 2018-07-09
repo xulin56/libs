@@ -513,8 +513,8 @@ function unbind(obj,evname,fn){
 
 //获取字符串中的数组
 function findNum(str) {
-    let arr = [];
-    let tmp = '';
+    var arr = [];
+    var tmp = '';
     for(var i=0;i<str.length;i++){
         if(str.charAt(i)<='9' && str.charAt(i)>0){
             tmp += str.charAt(i);
@@ -909,7 +909,7 @@ function ScrollTextTop(scroll_begin,scroll_end,scroll_div){
 //随机改变数组里元素的顺序
 function arrRandom(arr) {
         const len = arr.length
-        for (let i = 0; i < len; ++i) {
+        for (var i = 0; i < len; ++i) {
             const x = Math.floor(Math.random() * len)
             const y = Math.floor(Math.random() * len)
             const temp = arr[x]
