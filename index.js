@@ -205,9 +205,9 @@ function getArrMax(arr) {
 };
 
 //获取数组中最大值，es6写法
-function getArrMaxVal(arr) {
-    return Math.max(...arr);
-};
+// function getArrMaxVal(arr) {
+//     return Math.max(...arr);
+// };
 
 // 去除数组中的重复项
 function unique(arr) {
