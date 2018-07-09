@@ -392,7 +392,7 @@ function isOnline(onlineCb,offlineCb) {
 
 
 //localStorage和localSession封装
-var Store=function(){
+var Store = function(){
     this.name='Store';
 };
 Store.prototype={
@@ -407,13 +407,13 @@ Store.prototype={
 
         switch(type){
             case 'object':
-                            this.store().setItem(key,JSON.stringify(value));
+                        this.store().setItem(key,JSON.stringify(value));
                         break;
             case 'array':
-                            this.store().setItem(key,'['+value+']');
+                        this.store().setItem(key,'['+value+']');
                         break;
             case 'function'://如果是函数先用eval()计算执行js代码
-                            this.store().setItem(key,value);
+                        this.store().setItem(key,value);
                         break;
             default :
                             this.store().setItem(key,value);
@@ -850,13 +850,15 @@ function goTop(){
     </ul>
     <div id="scroll_end"></div>
 </div>*/
-function ScrollImgLeft(scroll_begin,scroll_end,scroll_div){
-    var speed=50;
+function ScrollTextLeft(scroll_begin,scroll_end,scroll_div){
+    var speed=60;
     var MyMar = null;
     scroll_end.innerHTML=scroll_begin.innerHTML;
     function Marquee(){
-        if(scroll_end.offsetWidth-scroll_div.scrollLeft<=0)
+        if(scroll_end.offsetWidth-scroll_div.scrollLeft<=0){
             scroll_div.scrollLeft-=scroll_begin.offsetWidth;
+            // scroll_div.scrollLeft = 0;
+        }
         else
             scroll_div.scrollLeft++;
     }
@@ -868,6 +870,54 @@ function ScrollImgLeft(scroll_begin,scroll_end,scroll_div){
         MyMar = setInterval(Marquee,speed);
     }
 };
+
+//文字竖向滚动
+/*<div className="roll" id="roll">
+    <ul id='begin'>
+        <li>第一个结构</li>
+        <li>第二个结构</li>
+        <li>第三个结构</li>
+        <li>第四个结构</li>
+        <li>第五个结构</li>
+        <li>第六个结构</li>
+        <li>第七个结构</li>
+        <li>第八个结构</li>
+    </ul>
+    <div id="end"></div>
+</div>*/
+function ScrollTextTop(scroll_begin,scroll_end,scroll_div){
+    var speed=50;
+    var MyMar = null;
+    scroll_end.innerHTML=scroll_begin.innerHTML;
+    function Marquee(){
+        if(scroll_end.offsetHeight-scroll_div.scrollTop<=0){
+            scroll_div.scrollTop-=scroll_begin.offsetHeight;
+            // scroll_div.scrollLeft = 0;
+        }
+        else
+            scroll_div.scrollTop++;
+    }
+    MyMar=setInterval(Marquee,speed);
+    scroll_div.onmouseover = function(){
+        clearInterval(MyMar);
+    }
+    scroll_div.onmouseout = function(){
+        MyMar = setInterval(Marquee,speed);
+    }
+};
+
+//随机改变数组里元素的顺序
+function arrRandom(arr) {
+        const len = arr.length
+        for (let i = 0; i < len; ++i) {
+            const x = Math.floor(Math.random() * len)
+            const y = Math.floor(Math.random() * len)
+            const temp = arr[x]
+            arr[x] = arr[y]
+            arr[y] = temp
+        }
+        return arr
+    };
 
 export {
     idDom,
@@ -918,5 +968,7 @@ export {
     getWindowHeight,
     getBottom,
     goTop,
-    ScrollImgLeft
+    ScrollTextLeft,
+    ScrollTextTop,
+    arrRandom
 }
