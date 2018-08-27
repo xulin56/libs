@@ -7,8 +7,20 @@
     <link rel="stylesheet" type="text/css" href="" />
     <script src="index.js"></script>
     <script type="text/javascript">
-    let str = 'skdljflsdjf989sldsldjslfj123sldlsajdlsdjf89'
-    console.log(findNum(str))
+    var Chinese = {
+　　nation:'中国'
+}
+var Doctor = {
+　　career:'医生'
+}　　
+Doctor = deepCopy(Chinese);
+// Doctor = Chinese;
+Chinese.birthPlaces = ['北京','上海','香港'];
+console.log(Doctor)
+console.log(Chinese)
+Doctor.birthPlaces.push('厦门');
+// console.log(Doctor.birthPlaces);
+// console.log(Chinese.birthPlaces)
     </script>
 </head>
 <body>

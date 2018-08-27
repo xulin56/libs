@@ -908,67 +908,81 @@ function ScrollTextTop(scroll_begin,scroll_end,scroll_div){
 
 //随机改变数组里元素的顺序
 function arrRandom(arr) {
-        const len = arr.length
-        for (var i = 0; i < len; ++i) {
-            const x = Math.floor(Math.random() * len)
-            const y = Math.floor(Math.random() * len)
-            const temp = arr[x]
-            arr[x] = arr[y]
-            arr[y] = temp
-        }
-        return arr
-    };
+    const len = arr.length
+    for (var i = 0; i < len; ++i) {
+        const x = Math.floor(Math.random() * len)
+        const y = Math.floor(Math.random() * len)
+        const temp = arr[x]
+        arr[x] = arr[y]
+        arr[y] = temp
+    }
+    return arr
+};
 
-export {
-    idDom,
-    classDom,
-    tagDom,
-    QSDom,
-    QSADom,
-    createDom,
-    createtxt,
-    addDom,
-    addBody,
-    isEmpty,
-    lTrim,
-    trim,
-    rTrim,
-    isNumber,
-    customEvent,
-    getParmeter,
-    bubbleSort,
-    descendingSort,
-    getArrMax,
-    getArrMaxVal,
-    unique,
-    rnd,
-    ajax,
-    cookie,
-    isOnline,
-    lStore,
-    sStore,
-    goPage,
-    htmlFontSize,
-    isPhone,
-    isWeixin,
-    bind,
-    unbind,
-    dataType,
-    soleString32,
-    findNum,
-    getPos,
-    normalDate,
-    dateFormat0,
-    dateFormat1,
-    changeTwoDecimal_f,
-    getDecimal,
-    myAjax,
-    getScrollTop,
-    getScrollHeight,
-    getWindowHeight,
-    getBottom,
-    goTop,
-    ScrollTextLeft,
-    ScrollTextTop,
-    arrRandom
-}
+// 深拷贝
+function deepCopy(p, c) {
+　　　　var c = c || {};
+　　　　for (var i in p) {
+　　　　　　if (typeof p[i] === 'object') {
+　　　　　　　　c[i] = (p[i].constructor === Array) ? [] : {};
+　　　　　　　　deepCopy(p[i], c[i]);
+　　　　　　} else {
+　　　　　　　　　c[i] = p[i];
+　　　　　　}
+　　　　}
+　　　　return c;
+　　}
+// export {
+//     idDom,
+//     classDom,
+//     tagDom,
+//     QSDom,
+//     QSADom,
+//     createDom,
+//     createtxt,
+//     addDom,
+//     addBody,
+//     isEmpty,
+//     lTrim,
+//     trim,
+//     rTrim,
+//     isNumber,
+//     customEvent,
+//     getParmeter,
+//     bubbleSort,
+//     descendingSort,
+//     getArrMax,
+//     getArrMaxVal,
+//     unique,
+//     rnd,
+//     ajax,
+//     cookie,
+//     isOnline,
+//     lStore,
+//     sStore,
+//     goPage,
+//     htmlFontSize,
+//     isPhone,
+//     isWeixin,
+//     bind,
+//     unbind,
+//     dataType,
+//     soleString32,
+//     findNum,
+//     getPos,
+//     normalDate,
+//     dateFormat0,
+//     dateFormat1,
+//     changeTwoDecimal_f,
+//     getDecimal,
+//     myAjax,
+//     getScrollTop,
+//     getScrollHeight,
+//     getWindowHeight,
+//     getBottom,
+//     goTop,
+//     ScrollTextLeft,
+//     ScrollTextTop,
+//     arrRandom，
+//     deepCopy
+// }
