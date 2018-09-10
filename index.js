@@ -921,68 +921,144 @@ function arrRandom(arr) {
 
 // 深拷贝
 function deepCopy(p, c) {
-　　　　var c = c || {};
-　　　　for (var i in p) {
-　　　　　　if (typeof p[i] === 'object') {
-　　　　　　　　c[i] = (p[i].constructor === Array) ? [] : {};
+    var c = c || {};
+　　 for (var i in p) {
+　　    if (typeof p[i] === 'object') {
+　　　　    c[i] = (p[i].constructor === Array) ? [] : {};
 　　　　　　　　deepCopy(p[i], c[i]);
-　　　　　　} else {
+　　　　 } else {
 　　　　　　　　　c[i] = p[i];
-　　　　　　}
-　　　　}
+　　　　　}
+　　　}
 　　　　return c;
-　　}
-// export {
-//     idDom,
-//     classDom,
-//     tagDom,
-//     QSDom,
-//     QSADom,
-//     createDom,
-//     createtxt,
-//     addDom,
-//     addBody,
-//     isEmpty,
-//     lTrim,
-//     trim,
-//     rTrim,
-//     isNumber,
-//     customEvent,
-//     getParmeter,
-//     bubbleSort,
-//     descendingSort,
-//     getArrMax,
-//     getArrMaxVal,
-//     unique,
-//     rnd,
-//     ajax,
-//     cookie,
-//     isOnline,
-//     lStore,
-//     sStore,
-//     goPage,
-//     htmlFontSize,
-//     isPhone,
-//     isWeixin,
-//     bind,
-//     unbind,
-//     dataType,
-//     soleString32,
-//     findNum,
-//     getPos,
-//     normalDate,
-//     dateFormat0,
-//     dateFormat1,
-//     changeTwoDecimal_f,
-//     getDecimal,
-//     myAjax,
-//     getScrollTop,
-//     getScrollHeight,
-//     getWindowHeight,
-//     getBottom,
-//     goTop,
-//     ScrollTextLeft,
-//     ScrollTextTop,
-//     arrRandom，
-//     deepCopy
-// }
+}
+function Check() {
+}
+Check.prototype = {
+    //校验数字
+    checkNum: function (value) {
+        var reg = /^\d+$/;
+        return reg.test(value);
+    },
+    //校验电话
+    checkTel: function (value) {
+        var reg = /^[0-9-]+/;
+        return reg.test(value);
+    },
+    //校验手机号
+    checkMobile: function (value) {
+        var reg = /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])[0-9]{8}$/;
+        return reg.test(value);
+    },
+    //校验金额
+    checkPrice: function (value) {
+        var reg = /^(\d{1,10}(\.\d{0,2})?)$/;
+        return reg.test(value);
+    },
+    //校验验证码
+    checkSmsCode: function (value) {
+        var reg = /^\d{4}$/;
+        return reg.test(value);
+    },
+    //校验密码
+    checkPassword: function (value) {
+        var reg = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{6,20}/;
+        return reg.test(value);
+    },
+    //校验身份证
+    checkIdCard: function (value) {
+        var exg = /^(\d{17}[0-9X]{1})$/;
+        return exg.test(value);
+    },
+    //判断是否为空
+  isEmpty: function (obj) {
+    function isEmptyObject(e) {
+      var t;
+      for (t in e)
+        return !1;
+      return !0
+    }
+    if (obj == ''||obj == null){
+      return true
+    }
+    if (!isNaN(obj)) {
+      return false
+    }
+    if (obj == undefined  || isEmptyObject(obj)) {
+      return true
+    }
+    return obj.length == 0;
+  },
+  //比较两个对象的属性值是否一样
+  isObjectValueEqual: function (a, b, props) {
+    function isArray(o) {
+      return Object.prototype.toString.call(o) == '[object Array]';
+    }
+
+    if (!isArray(props)) {
+      return false
+    }
+    for (var i = 0; i < props.length; i++) {
+      if (a[props[i]] != b[props[i]]) {
+        return false
+      }
+    }
+    return true;
+  }
+}
+var Check = new Check();
+export {
+    idDom,
+    classDom,
+    tagDom,
+    QSDom,
+    QSADom,
+    createDom,
+    createtxt,
+    addDom,
+    addBody,
+    isEmpty,
+    lTrim,
+    trim,
+    rTrim,
+    isNumber,
+    customEvent,
+    getParmeter,
+    bubbleSort,
+    descendingSort,
+    getArrMax,
+    getArrMaxVal,
+    unique,
+    rnd,
+    ajax,
+    cookie,
+    isOnline,
+    lStore,
+    sStore,
+    goPage,
+    htmlFontSize,
+    isPhone,
+    isWeixin,
+    bind,
+    unbind,
+    dataType,
+    soleString32,
+    findNum,
+    getPos,
+    normalDate,
+    dateFormat0,
+    dateFormat1,
+    changeTwoDecimal_f,
+    getDecimal,
+    myAjax,
+    getScrollTop,
+    getScrollHeight,
+    getWindowHeight,
+    getBottom,
+    goTop,
+    ScrollTextLeft,
+    ScrollTextTop,
+    arrRandom，
+    deepCopy,
+    Check
+}
