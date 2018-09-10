@@ -932,7 +932,9 @@ function deepCopy(p, c) {
 　　　　　}
 　　　}
 　　　　return c;
-}
+};
+
+//常用校正正则
 function Check() {
 }
 Check.prototype = {
@@ -1009,6 +1011,54 @@ Check.prototype = {
 }
 var Check = new Check();
 
+function GetLocalTime() {
+    this.nowdate = new Date();
+    this.y = this.nowdate.getFullYear();
+    this.m = this.nowdate.getMonth()+1;
+    this.d = this.nowdate.getDate();
+    this.h = this.nowdate.getHours();
+    this.mi = this.nowdate.getMinutes();
+    this.s = this.nowdate.getSeconds();
+    if(this.mi<10) this.mi= '0'+this.mi;
+    if(this.s<10) this.s = '0'+this.s;
+}
+GetLocalTime.prototype = {
+    //获取系统当前时间
+    getCurrentTime : function(type) {
+        if(type === 'yyyy/MM/dd'){
+            return this.y+'/'+this.m+'/'+this.d+' '+this.h+':'+this.mi+':'+this.s;
+        }else {
+            return this.y+'-'+this.m+'-'+this.d+' '+this.h+':'+this.mi+':'+this.s;
+        }
+    },
+    //获取系统前一周的时间
+    getOneweekDate : function(type) {
+        let oneweekdate = new Date(this.nowdate-7*24*3600*1000);
+        let y = oneweekdate.getFullYear();
+        let m = oneweekdate.getMonth()+1;
+        let d = oneweekdate.getDate();
+        let h = oneweekdate.getHours();
+        let mi = oneweekdate.getMinutes();
+        let s = oneweekdate.getSeconds();
+        if(mi<10) mi= '0'+mi;
+        if(s<10) s = '0'+s;
+        if(type == 'yyyy/MM/dd'){
+            return y+'/'+m+'/'+d+' '+h+':'+mi+':'+s;
+        }else {
+            return y+'-'+m+'-'+d+' '+h+':'+mi+':'+s;
+        }
+    },
+    //获取系统前一个月的时间
+    getBeforeMonth : function(type) {
+         if(type == 'yyyy/MM/dd'){
+            return this.y+'/'+(this.m-1)+'/'+this.d+' '+this.h+':'+this.mi+':'+this.s;
+         }else {
+            return this.y+'-'+(this.m-1)+'-'+this.d+' '+this.h+':'+this.mi+':'+this.s;
+         }
+    }
+}
+var GetLocalTime = new GetLocalTime();
+
 // export {
 //     idDom,
 //     classDom,
@@ -1062,5 +1112,8 @@ var Check = new Check();
 //     ScrollTextTop,
 //     arrRandom，
 //     deepCopy,
-//     Check
+//     Check,
+//     getCurrentTime,
+//     getOneweekDate,
+//     getBeforeMonth
 // }
