@@ -972,23 +972,23 @@ Check.prototype = {
         return exg.test(value);
     },
     //判断是否为空
-  isEmpty: function (obj) {
-    function isEmptyObject(e) {
-      var t;
-      for (t in e)
-        return !1;
-      return !0
-    }
-    if (obj == ''||obj == null){
-      return true
-    }
-    if (!isNaN(obj)) {
-      return false
-    }
-    if (obj == undefined  || isEmptyObject(obj)) {
-      return true
-    }
-    return obj.length == 0;
+    isEmpty: function (obj) {
+       function isEmptyObject(e) {
+          var t;
+          for (t in e)
+          return !1;
+       return !0
+       }
+       if (obj == ''||obj == null){
+          return true
+       }
+       if (!isNaN(obj)) {
+          return false
+       }
+       if (obj == undefined  || isEmptyObject(obj)) {
+          return true
+       }
+          return obj.length == 0;
   },
   //比较两个对象的属性值是否一样
   isObjectValueEqual: function (a, b, props) {
