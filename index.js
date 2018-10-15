@@ -170,6 +170,22 @@ function getParmeter(name) {
     }
 };
 
+//获取url后面的参数
+function getURLParams() {
+  var paramStr = window.location.hash.slice(1);
+  if (paramStr.length > 0) {
+    var paramsList = paramStr.replace('?', '&').split('&')
+    var param = {}
+    for (var i = 0; i < paramsList.length; i ++) {
+      var keyValue = paramsList[i].split('=')
+
+      param[keyValue[0]] = keyValue[1]
+    }
+    return param
+  } else {
+    return {}
+  }
+}
 // 冒泡排序
 function bubbleSort(arr) {
 　　var low = 0;
@@ -763,7 +779,7 @@ function getDecimal(val){
             /*客户端可用的响应结果*/
             var result=null;
             /*9.获取响应头Content-Type ---类型是字符串*/
-            var grc=xhr.getResponseHeader("Content-Type");
+            var grc=xhr.getResponseHeader("Content-Type") || '';
             /*10.根据Content-Type类型来判断如何进行解析*/
             if(grc.indexOf("json") != -1){
                 /*转换为js对象*/
@@ -1092,6 +1108,7 @@ export {
     isNumber,
     customEvent,
     getParmeter,
+    getURLParams,
     bubbleSort,
     descendingSort,
     getArrMax,
