@@ -1091,6 +1091,15 @@ function isPhoneSys(){
     webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
   };
 }
+
+//es5定义常量的方法
+function es5Const(val){
+    return Object.defineProperty(window,'myConst',{
+        value : val,
+        writable : false
+    })
+}
+
 export {
     idDom,
     classDom,
