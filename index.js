@@ -1110,6 +1110,32 @@ function es5Const(val){
     })
 }
 
+//深拷贝
+function deepCopy(obj) {
+    var result = Array.isArray(obj) ? [] : {};
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            if (typeof obj[key] === 'object') {
+                result[key] = deepCopy(obj[key]); //如果是对象，递归复制
+            } else {
+                result[key] = obj[key];
+            }
+        }
+    }
+    return result;
+}
+
+//删除数组中某个元素
+function deleArrItem(arr, val) {
+    let del = arr.map(item => {
+        for (let i = 0; i < Object.keys(item).length; i++) {
+            if (Object.keys(item)[i] === val) {
+                delete item[val]
+            }
+        }
+    })
+
+}
 export {
     idDom,
     classDom,
@@ -1162,12 +1188,14 @@ export {
     goTop,
     ScrollTextLeft,
     ScrollTextTop,
-    arrRandom，
+    arrRandom,
     deepCopy,
     Check,
     getCurrentTime,
     getOneweekDate,
     getBeforeMonth,
     isPhoneSys,
-    es5Const
+    es5Const,
+    deepCopy,
+    deleArrItem
 }
