@@ -1125,6 +1125,12 @@ function deepCopy(obj) {
     return result;
 }
 
+//将json字符串中key值加引号
+function getJSON(str='{a:1,b:1,children:[{name:"dd",age:12},{name:"sds",age:12}]}') {
+    var jsonStr = str.replace(/(?:\s*['"]*)?([a-zA-Z0-9]+)(?:['"]*\s*)?:/g, "\"$1\":");
+    return JSON.parse(jsonStr)
+}
+
 //删除数组中某个元素
 function deleArrItem(arr, val) {
     let del = arr.map(item => {
@@ -1197,5 +1203,6 @@ export {
     isPhoneSys,
     es5Const,
     deepCopy,
-    deleArrItem
+    deleArrItem,
+    getJSON
 }
